@@ -1,0 +1,29 @@
+# FastAPI and server
+fastapi
+uvicorn[standard]
+
+# DeepFace for facial emotion recognition
+deepface
+
+# Audio processing
+librosa
+soundfile  # required by librosa
+numpy
+scipy
+
+# Machine Learning and LSTM
+tensorflow
+scikit-learn
+
+# Google Gemini API
+google-generativeai
+
+# MongoDB client
+pymongo
+
+# File handling & utilities
+python-multipart  # for file uploads in FastAPI
+python-dotenv     # for .env config file
+
+# Optional (for async MongoDB access, use instead of pymongo)
+# motor
