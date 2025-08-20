@@ -1,8 +1,12 @@
-import React from 'react'
+
+import MediaCapture from './components/MediaCapture'
 
 const App = () => {
   return (
-    <div className='bg-blue-200'>App</div>
+    <>
+    <div>asdasdad</div>
+    <MediaCapture/>
+    </>
   )
 }
 
