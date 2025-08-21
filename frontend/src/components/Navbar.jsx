@@ -5,7 +5,7 @@ export default function Navbar() {
     const [open, setOpen] = useState(false);
 
     return (
-        <header className="w-full bg-black text-white px-6 py-4 flex justify-between items-center">
+        <header className="w-full fixed z-30 bg-black/5 backdrop-blur border-b border-white/30 text-white px-6 py-2 flex justify-between items-center">
             {/* Logo */}
             <div className="text-2xl font-bold">Moodstory.io</div>
 
@@ -15,10 +15,6 @@ export default function Navbar() {
                 <a href="#" className="hover:text-purple-400">Service</a>
                 <div className="relative group">
                     <button className="hover:text-purple-400">Tools +</button>
-                    <div className="absolute hidden group-hover:block bg-gray-900 p-2 rounded-lg mt-2">
-                        <a href="#" className="block px-4 py-2 hover:bg-gray-800">Tool 1</a>
-                        <a href="#" className="block px-4 py-2 hover:bg-gray-800">Tool 2</a>
-                    </div>
                 </div>
                 <a href="#" className="hover:text-purple-400">Feature</a>
             </nav>
