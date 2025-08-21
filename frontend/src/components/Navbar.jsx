@@ -13,7 +13,13 @@ export default function Navbar() {
         }
     }, [showInput]);
     return (
-        <header className="w-full fixed z-30 bg-black/5 backdrop-blur border-b border-white/30 text-white px-6 py-2 flex justify-between items-center">
+        <header className="w-full fixed z-30 
+            bg-black/10 backdrop-blur-xl 
+            shadow-[0_4px_30px_rgba(0,0,0,0.25)] 
+            text-white px-6 py-2 
+            flex justify-between items-center
+            transition-all duration-300 shadow-xl">
+
             {/* Logo */}
             <div className=" text-2xl w-1/4 font-bold">Moodstory.io</div>
 
@@ -30,6 +36,15 @@ export default function Navbar() {
 
 
             {/* Actions */}
+<<<<<<< HEAD
+            <div className="flex items-center space-x-4">
+                <button className="p-2 rounded-full hover:bg-gray-800/50">
+                    <Search size={18} />
+                </button>
+                <button className="px-4 py-2 rounded-full bg-purple-800 hover:bg-purple-700">
+                    Login
+                </button>
+=======
             <div className="w-fit flex items-right space-x-4">
                 {/* Search Wrapper with fixed width to avoid layout shift */}
                 <div className="relative w-48 flex items-center justify-end">
@@ -57,6 +72,7 @@ export default function Navbar() {
                 </div>
 
                 <LoginButton />
+>>>>>>> dcc6c60761b5e891b8b75ff3e6bfa14b35595880
             </div>
 
             {/* Mobile Menu Button */}
