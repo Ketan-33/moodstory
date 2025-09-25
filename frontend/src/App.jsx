@@ -1,13 +1,14 @@
-
-import MediaCapture from './components/MediaCapture'
 import Navbar from './components/Navbar'
-import Home from './pages/Home'
+import Home from './pages/home'
+
+import Story from './pages/story'
 
 const App = () => {
   return (
     <>
       <Navbar />
-      <Home/>
+      <Home />
+      <Story />
       {/* <MediaCapture /> */}
 
     </>
