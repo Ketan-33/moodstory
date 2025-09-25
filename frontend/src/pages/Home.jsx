@@ -1,8 +1,10 @@
 import video from "../assets/video.mp4";
 import { Smile, Brain, Film, Music, ArrowLeft, ArrowRight } from "lucide-react";
-
+import { useNavigate } from "react-router-dom";
 
 export default function Home() {
+    const navigate = useNavigate();
+
     return (
         <div>
         <section className="relative pt-20 h-screen  text-white min-h-screen flex flex-col justify-center items-center px-4 sm:px-6 md:px-20 overflow-hidden w-full">
@@ -37,12 +39,14 @@ export default function Home() {
                    bg-gradient-to-r from-purple-500 via-pink-500 to-blue-500
                    bg-[length:200%_200%] animate-gradient-slow
                    hover:scale-101 transition-transform duration-300 shadow-lg shadow-purple-500/30">
-                        Start Listening
+                        Generate Story
                     </button>
-
-                    <button className="px-6 py-3 border border-gray-700 rounded-full hover:border-white transition">
-                        Explore Features
-                    </button>
+              <button
+                onClick={() => navigate("/story")}
+                className="px-6 py-3 border border-gray-700 rounded-full hover:border-white transition"
+              >
+                Explore Features
+              </button>
                 </div>
             </div>
 
