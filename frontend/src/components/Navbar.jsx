@@ -1,8 +1,9 @@
 import { useEffect, useRef, useState } from "react";
 import { Menu, X, Search } from "lucide-react";
 import LoginButton from "./ui/LoginButton";
+import { Link } from "react-router-dom";
 
-export default function Navbar() {
+const Navbar = ()=> {
     const [open, setOpen] = useState(false);
     const [showInput, setShowInput] = useState(false);
     const inputRef = useRef(null);
@@ -15,7 +16,6 @@ export default function Navbar() {
     return (
         <header className="w-full fixed z-30 
             bg-black/10 backdrop-blur-xl 
-            shadow-[0_4px_30px_rgba(0,0,0,0.25)] 
             text-white px-6 py-2 
             flex justify-between items-center
             transition-all duration-300 shadow-xl">
@@ -26,7 +26,7 @@ export default function Navbar() {
             {/* Desktop Menu */}
 
                 <nav className="w-1/2   hidden md:flex justify-center items-center space-x-14 ">
-                    <a href="#" className="hover:text-purple-400">Home</a>
+                    <Link href="/" className="hover:text-purple-400">Home</Link>
                     <a href="#" className="hover:text-purple-400">Service</a>
 
                     <a href="#" className="hover:text-purple-400">Tools +</a>
@@ -49,7 +49,7 @@ export default function Navbar() {
                             type="text"
                             placeholder="Search..."
                             className="bg-purple-900/30 outline-none text-white px-3 py-1 rounded w-full"
-                            onFocus={true}
+                            onFocus={()=>{}}
                         />
                     </div>
 
@@ -75,3 +75,5 @@ export default function Navbar() {
         </header>
     );
 }
+
+export default Navbar

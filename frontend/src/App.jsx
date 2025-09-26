@@ -1,16 +1,13 @@
+import { Outlet } from 'react-router-dom'
 import Navbar from './components/Navbar'
-import Home from './pages/home'
-
-import Story from './pages/story'
+import Footer from './components/Footer'
 
 const App = () => {
   return (
     <>
       <Navbar />
-      <Home />
-      <Story />
-      {/* <MediaCapture /> */}
-
+      <Outlet/>
+      <Footer/>
     </>
   )
 }
