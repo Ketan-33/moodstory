@@ -1,10 +1,8 @@
-import React from 'react'
-import MediaCapture from './components/MediaCapture'
 
 const Story = () => {
   return (
-    <div>
-      
+    <div className="bg-gradient-to-br from-pink-500 to-purple-500 h-screen">
+      This is Story Page
     </div>
   )
 }
