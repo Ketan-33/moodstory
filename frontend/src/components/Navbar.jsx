@@ -25,7 +25,7 @@ const Navbar = ()=> {
 
             {/* Desktop Menu */}
 
-                <nav className="w-1/2   hidden md:flex justify-center items-center space-x-14 ">
+                <nav className="w-1/2   hidden md:flex justify-center items-center  space-x-14 ">
                     <Link href="/" className="hover:text-purple-400">Home</Link>
                     <a href="#" className="hover:text-purple-400">Service</a>
 
@@ -48,7 +48,8 @@ const Navbar = ()=> {
                             ref={inputRef}
                             type="text"
                             placeholder="Search..."
-                            className="bg-purple-900/30 outline-none text-white px-3 py-1 rounded w-full"
+                            className="bg-purple-900/30 outline-none text-white px-3
+                             py-1 rounded w-full"
                             onFocus={()=>{}}
                         />
                     </div>
