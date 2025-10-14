@@ -6,7 +6,7 @@ from fastapi import APIRouter, File, UploadFile
 router = APIRouter()
 
 @router.post("/generate-story")
-async def generate_story_endpoint(image: UploadFile = File(...), audio: UploadFile = File(...)):
+async def generate_story_endpoint(image: UploadFile = File(...), audio: UploadFile = File(...), genre: str = "any"):
     # Save files
     img_path = f"uploads/{image.filename}"
     audio_path = f"uploads/{audio.filename}"
@@ -20,10 +20,15 @@ async def generate_story_endpoint(image: UploadFile = File(...), audio: UploadFi
     # Dummy steps
     mood = detect_mood(img_path, audio_path)
     words = generate_words(mood)
-    story = generate_story(mood, words)
+    story = generate_story(mood, words, genre)
+
+    story_lines = story.split("\n", 1)  # split at the first newline
+    title = story_lines[0].strip() if len(story_lines) > 0 else ""
+    body = story_lines[1].strip() if len(story_lines) > 1 else ""
 
     return {
         "mood": mood,
         "words": words,
-        "story": story
+        "title": title,
+        "body": body
     }

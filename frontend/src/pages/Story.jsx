@@ -1,8 +1,8 @@
-import { useEffect, useState, useRef } from "react";
 import { Mic, MicOff, Video } from "lucide-react";
-import { ScanningAnimation } from "../components/ui/ScanningAnimation";
-import "./css/Story.css"
+import { useEffect, useRef, useState } from "react";
 import audio1 from "../assets/test.wav";
+import { ScanningAnimation } from "../components/ui/ScanningAnimation";
+import "./css/Story.css";
 const genres = ["Adventure", "Fantasy", "Mystery", "Sci-Fi", "Comedy"];
 
 const Story = () => {
@@ -43,19 +43,24 @@ const Story = () => {
       const generateStory = async () => {
         try {
           const result = await handleSubmit();
-          if (result && result.story) {
+
+          // The backend returns { title, body, mood, words }
+          if (result && (result.title || result.body)) {
             setStory({
-              title: "Title", // placeholder — you'll replace with your title logic later
-              text: result.story,
+              title: result.title || "Untitled Story",
+              text: result.body || "",
             });
             setDisplayedText(""); // reset typewriter
             setTypewriterIndex(0);
             setPageState("STORY_DISPLAY");
           } else {
-            console.error("Invalid response format:", result);
+            console.error("Invalid response format from /generate-story:", result);
+            // fallback: go back to selection so user can try again
+            setPageState('GENRE_SELECTION');
           }
         } catch (err) {
           console.error("Error generating story:", err);
+          setPageState('GENRE_SELECTION');
         }
       };
       generateStory();
@@ -170,6 +175,10 @@ const Story = () => {
 
       if (response.ok) {
         const result = await response.json();
+        setStory({
+          title: result.title || "Untitled Story",
+          text: result.body || "No story content available."
+        });
         console.log("Upload success:", result);
         return result;
       } else {
