@@ -3,7 +3,7 @@ import App from "../App"
 import Home from "../pages/Home";
 import Story from "../pages/Story";
 import Test from "../pages/Test";
-import Demo from "../components/Demo";
+import WebcamCapture from "../components/Demo";
 
 const router = createBrowserRouter([
     {
@@ -24,7 +24,7 @@ const router = createBrowserRouter([
             },
             {
                 path:"demo",
-                element :<Demo/>
+                element :<WebcamCapture/>
             },
             
         ]
