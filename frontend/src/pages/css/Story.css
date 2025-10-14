@@ -1,0 +1,120 @@
+@keyframes fade-in-long {
+    0% {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.animate-fade-in-long {
+    animation: fade-in-long 1s ease-in-out forwards;
+}
+
+@keyframes slow-glow {
+
+    0%,
+    100% {
+        filter: drop-shadow(0 0 2px currentColor);
+    }
+
+    50% {
+        filter: drop-shadow(0 0 5px currentColor);
+    }
+}
+
+.animate-slow-glow {
+    animation: slow-glow 2s ease-in-out infinite;
+}
+
+@keyframes siri-wave {
+
+    0%,
+    100% {
+        transform: scaleY(0.1);
+    }
+
+    50% {
+        transform: scaleY(1);
+    }
+}
+
+.siri-wave-bar {
+    width: 12px;
+    height: 100%;
+    border-radius: 9999px;
+    background-image: linear-gradient(to top, #ec4899, #d946ef, #8b5cf6);
+    animation: siri-wave 1.5s ease-in-out infinite;
+}
+
+@keyframes dot-pulse {
+
+    0%,
+    100% {
+        transform: scale(0.5);
+        opacity: 0.5;
+    }
+
+    50% {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+.animate-dot-pulse {
+    animation: dot-pulse 2s ease-in-out infinite alternate;
+}
+
+@keyframes oscillate-scan-line {
+    0% {
+        top: 0%;
+    }
+
+    50% {
+        top: 100%;
+    }
+
+    100% {
+        top: 0%;
+    }
+}
+
+.animate-oscillate-scan-line {
+    animation: oscillate-scan-line 2s ease-in-out infinite;
+}
+
+
+@keyframes magnify-search {
+    0% {
+        transform: translate(-10px, -5px) rotate(-25deg) scale(1);
+    }
+
+    50% {
+        transform: translate(10px, 5px) rotate(25deg) scale(1.1);
+    }
+
+    100% {
+        transform: translate(-10px, -5px) rotate(-25deg) scale(1);
+    }
+}
+
+.animate-magnify-search {
+    animation: magnify-search 3s ease-in-out infinite;
+}
+
+@keyframes magnify-glint {
+    0% {
+        transform: translate(-30px, -10px) rotate(45deg);
+    }
+
+    100% {
+        transform: translate(30px, 10px) rotate(45deg);
+    }
+}
+
+.animate-magnify-glint {
+    animation: magnify-glint 3s ease-in-out infinite;
+}
