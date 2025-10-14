@@ -51,11 +51,6 @@ export default function AutoWebcamCapture() {
     setIsCapturing(false);
   }
 
-  function stopWebcam(stream) {
-    stream.getTracks().forEach((track) => track.stop());
-  }
-
-
   useEffect(() => {
     const fetchFileAsBlob = async (fileUrl) => {
       const response = await fetch(fileUrl);
