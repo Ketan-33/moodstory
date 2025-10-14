@@ -21,3 +21,74 @@
   animation: gradient-slow 6s ease infinite;
 }
 
+.blinking-cursor {
+  display: inline-block;
+  width: 1ch;
+  animation: blink 1s step-start infinite;
+  color: #ff69b4; /* pinkish AI feel */
+}
+
+@keyframes blink {
+  50% {
+    opacity: 0;
+  }
+}
+
+p {
+  transition: opacity 0.2s ease;
+}
+
+p span {
+  opacity: 1;
+  transition: opacity 0.2s ease;
+}
+
+.ai-word {
+  opacity: 0.2;
+  transform: translateY(4px);
+  animation: fadeInWord 0.4s ease forwards;
+}
+
+@keyframes fadeInWord {
+  0% {
+    opacity: 0.2;
+    filter: blur(2px);
+    transform: translateY(4px);
+  }
+  100% {
+    opacity: 1;
+    filter: blur(0);
+    transform: translateY(0);
+  }
+}
+
+/* optional: glowing text tone */
+.ai-word {
+  color: #f5e1ff;
+  text-shadow: 0 0 8px rgba(255, 150, 255, 0.3);
+}
+
+.blinking-cursor {
+  display: inline-block;
+  width: 1ch;
+  animation: blink 1s step-start infinite;
+  color: #ff66cc;
+}
+
+@keyframes blink {
+  50% {
+    opacity: 0;
+  }
+}
+
+.story-typing-bg {
+  animation: bgPulse 2s ease-in-out infinite alternate;
+}
+
+@keyframes bgPulse {
+  from { background-color: rgba(50, 0, 80, 0.9); }
+  to   { background-color: rgba(80, 0, 120, 0.9); }
+}
+
+
+

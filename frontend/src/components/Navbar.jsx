@@ -26,12 +26,12 @@ const Navbar = ()=> {
             {/* Desktop Menu */}
 
                 <nav className="w-1/2   hidden md:flex justify-center items-center  space-x-14 ">
-                    <Link href="/" className="hover:text-purple-400">Home</Link>
-                    <a href="#" className="hover:text-purple-400">Service</a>
+                    {/* <Link href="/" className="hover:text-purple-400">Home</Link> */}
+                    {/* <a href="#" className="hover:text-purple-400">Service</a>
 
                     <a href="#" className="hover:text-purple-400">Tools +</a>
 
-                    <a href="#" className="hover:text-purple-400">Feature</a>
+                    <a href="#" className="hover:text-purple-400">Feature</a> */}
                 </nav>
 
 

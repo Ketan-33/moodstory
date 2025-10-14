@@ -109,14 +109,16 @@ const Home = () => {
           <div>
             {/* Tag */}
             <span className="inline-block px-4 py-1.5 mb-6 rounded-full 
-                           bg-purple-600/20 text-purple-400 text-sm font-medium">
-              About us
+                       bg-purple-600/20 text-purple-400 text-sm font-medium">
+              About Us
             </span>
 
             {/* Text */}
             <h2 className="text-xl sm:text-2xl font-light leading-relaxed text-gray-200">
-              Our AI-driven solutions are designed to learn, adapt, and grow with you,
-              making every interaction smarter and more intuitive.
+              Our project is a <strong>multimodal adaptive story generation system</strong>
+              that uses audio and visual inputs to craft personalized narratives.
+              Leveraging CNNs, LSTMs, and audio processing models like Librosa,
+              our system learns and adapts to generate engaging stories for every user.
             </h2>
 
             {/* Arrows */}
@@ -133,9 +135,9 @@ const Home = () => {
           {/* Right image */}
           <div className="flex justify-center md:justify-end">
             <img
-              src="/your-3d-shape.png"
+              src="/aboutModel.png"
               alt="AI 3D Shape"
-              className="w-72 md:w-96 drop-shadow-[0_0_30px_rgba(168,85,247,0.4)]"
+              className="w-72 md:w-96"
             />
           </div>
         </div>
@@ -143,23 +145,24 @@ const Home = () => {
         {/* Stats row */}
         <div className="max-w-6xl mx-auto grid grid-cols-2 sm:grid-cols-4 text-center mt-16 gap-8">
           <div>
-            <h3 className="text-3xl font-bold">100+</h3>
-            <p className="uppercase text-gray-400 tracking-wider text-sm mt-2">Major Project</p>
+            <h3 className="text-3xl font-bold">8+</h3>
+            <p className="uppercase text-gray-400 tracking-wider text-sm mt-2">Emotions Detectable</p>
           </div>
           <div>
-            <h3 className="text-3xl font-bold">150k+</h3>
-            <p className="uppercase text-gray-400 tracking-wider text-sm mt-2">Clients</p>
+            <h3 className="text-3xl font-bold">500+</h3>
+            <p className="uppercase text-gray-400 tracking-wider text-sm mt-2">Users Tested</p>
           </div>
           <div>
-            <h3 className="text-3xl font-bold">23</h3>
-            <p className="uppercase text-gray-400 tracking-wider text-sm mt-2">Awards</p>
+            <h3 className="text-3xl font-bold">92%</h3>
+            <p className="uppercase text-gray-400 tracking-wider text-sm mt-2">User Satisfaction</p>
           </div>
           <div>
-            <h3 className="text-3xl font-bold">25</h3>
-            <p className="uppercase text-gray-400 tracking-wider text-sm mt-2">Years of Work</p>
+            <h3 className="text-3xl font-bold">1.2k+</h3>
+            <p className="uppercase text-gray-400 tracking-wider text-sm mt-2">Stories Generated</p>
           </div>
         </div>
       </section>
+
     </div>
   );
 }
