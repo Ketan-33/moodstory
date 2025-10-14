@@ -9,7 +9,7 @@ const Story = () => {
   const [pageState, setPageState] = useState('GENRE_SELECTION');
   const [selectedGenre, setSelectedGenre] = useState(null);
   const [story, setStory] = useState({ title: "", text: "" });
-  const [displayedText, setDisplayedText] = useState("");
+  const [displayedText, setDisplayedText] = useState([]);
   const [typewriterIndex, setTypewriterIndex] = useState(0);
 
   const [stream, setStream] = useState(null);
@@ -48,7 +48,7 @@ const Story = () => {
               title: "Title", // placeholder — you'll replace with your title logic later
               text: result.story,
             });
-            setDisplayedText(""); // reset typewriter
+            setDisplayedText([]);
             setTypewriterIndex(0);
             setPageState("STORY_DISPLAY");
           } else {
@@ -64,15 +64,33 @@ const Story = () => {
 
 
   useEffect(() => {
-    if (pageState !== 'STORY_DISPLAY' || !story.text) return;
-    if (typewriterIndex < story.text.length) {
-      const timeout = setTimeout(() => {
-        setDisplayedText((prev) => prev + story.text[typewriterIndex]);
-        setTypewriterIndex(typewriterIndex + 1);
-      }, 10);
-      return () => clearTimeout(timeout);
-    }
-  }, [typewriterIndex, story.text, pageState]);
+    if (pageState !== "STORY_DISPLAY" || !story.text) return;
+
+    const words = story.text.split(" ");
+    let index = 0;
+    setDisplayedText([]);
+
+    const typeNext = () => {
+      if (index < words.length) {
+        const newWord = words[index];
+        setDisplayedText((prev) => [
+          ...prev,
+          { word: newWord, id: index } // store each word separately
+        ]);
+        index++;
+
+        // Dynamic delay (varies slightly)
+        const delay = 180 + Math.random() * 60;
+        setTimeout(typeNext, delay);
+      }
+    };
+
+    typeNext();
+
+    return () => { };
+  }, [story.text, pageState]);
+
+
 
   const toggleMic = () => {
     if (stream) stream.getAudioTracks().forEach(track => (track.enabled = !micEnabled));
@@ -160,7 +178,7 @@ const Story = () => {
     const formData = new FormData();
     formData.append("image", imageBlob, "face1.jpg");
     formData.append("audio", audioBlob, "test.wav");
-    formData.append("genre", selectedGenre);
+    // formData.append("genre", selectedGenre);
 
     try {
       const response = await fetch("http://127.0.0.1:8000/generate-story", {
@@ -229,11 +247,20 @@ const Story = () => {
         <div className="bg-gradient-to-br from-black to-purple-900 w-full h-full text-white flex flex-col items-center relative p-6 pt-24 overflow-y-auto">
 
           <h1 className="text-4xl md:text-5xl font-bold text-center mb-8">{story.title}</h1>
-          <p className="max-w-4xl text-lg text-left md:text-justify leading-relaxed whitespace-pre-wrap">{displayedText}</p>
+          <p className="max-w-4xl text-lg text-left text-justify leading-relaxed whitespace-pre-wrap">
+            {displayedText.map(({ word, id }) => (
+              <span key={id} className="ai-word">{word} </span>
+            ))}
+
+          </p>
+
+
+
+
           {previewVisible && stream && (
-            <video autoPlay playsInline muted className="absolute bottom-24 right-6 w-48 h-32 rounded-lg border-2 border-pink-500 shadow-lg object-cover" ref={(videoEl) => { if (videoEl) videoEl.srcObject = stream; }} />
+            <video autoPlay playsInline muted className="fixed bottom-24 right-6 w-48 h-32 rounded-lg border-2 border-pink-500 shadow-lg object-cover" ref={(videoEl) => { if (videoEl) videoEl.srcObject = stream; }} />
           )}
-          <div className="absolute bottom-6 right-6 flex gap-4">
+          <div className="fixed bottom-6 right-6 flex gap-4">
             <button onClick={toggleMic} className="p-3 rounded-full bg-black/40 hover:bg-black/60 transition">
               {micEnabled ? <Mic className="w-6 h-6 text-green-400" /> : <MicOff className="w-6 h-6 text-red-500" />}
             </button>
