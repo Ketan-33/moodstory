@@ -7,7 +7,7 @@ def detect_mood(image_path, audio_path=None):
     imood, iconfidence = mood_detector.predict_emotion(image_path)
     
     # TODO: Mood from Audio
-    amood = "happy"
+    # amood = "happy"
     
     # TODO: Combine moods
     mood = imood # change to iconfidence > aconfidence ? imood : amood after audio model is done
