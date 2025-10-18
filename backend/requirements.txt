@@ -5,6 +5,9 @@ uvicorn[standard]
 # DeepFace for facial emotion recognition
 deepface
 
+# Face detection and cropping
+opencv-python
+
 # Audio processing
 librosa
 soundfile  # required by librosa
