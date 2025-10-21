@@ -2,11 +2,33 @@ import { useEffect, useRef, useState } from "react";
 import { Menu, X, Search } from "lucide-react";
 import LoginButton from "./ui/LoginButton";
 import { Link } from "react-router-dom";
-
-const Navbar = ()=> {
+import { SignedIn, SignedOut, SignInButton, UserButton, useUser } from '@clerk/clerk-react';
+import { syncUser } from "../utils/syncUser";
+import { useUserContext } from "../context/UserContext";
+const Navbar = () => {
     const [open, setOpen] = useState(false);
     const [showInput, setShowInput] = useState(false);
     const inputRef = useRef(null);
+    const { setUserId, setUserData } = useUserContext();
+
+    const { isSignedIn, user } = useUser();
+
+    useEffect(() => {
+        if (isSignedIn && user) {
+            const userData = {
+                id: user.id,
+                name: user.fullName,
+                email: user.primaryEmailAddress?.emailAddress,
+                imageUrl: user.imageUrl,
+            };
+            setUserId(user.id);
+            setUserData(userData)
+            console.log(userData);
+
+            syncUser(userData);
+        }
+    }, [isSignedIn, user]);
+
 
     useEffect(() => {
         if (showInput) {
@@ -25,14 +47,14 @@ const Navbar = ()=> {
 
             {/* Desktop Menu */}
 
-                <nav className="w-1/2   hidden md:flex justify-center items-center  space-x-14 ">
-                    {/* <Link href="/" className="hover:text-purple-400">Home</Link> */}
-                    {/* <a href="#" className="hover:text-purple-400">Service</a>
+            <nav className="w-1/2   hidden md:flex justify-center items-center  space-x-14 ">
+                {/* <Link href="/" className="hover:text-purple-400">Home</Link> */}
+                {/* <a href="#" className="hover:text-purple-400">Service</a>
 
                     <a href="#" className="hover:text-purple-400">Tools +</a>
 
                     <a href="#" className="hover:text-purple-400">Feature</a> */}
-                </nav>
+            </nav>
 
 
             {/* Actions */}
@@ -50,7 +72,7 @@ const Navbar = ()=> {
                             placeholder="Search..."
                             className="bg-purple-900/30 outline-none text-white px-3
                              py-1 rounded w-full"
-                            onFocus={()=>{}}
+                            onFocus={() => { }}
                         />
                     </div>
 
@@ -62,8 +84,12 @@ const Navbar = ()=> {
                         <Search size={18} />
                     </button>
                 </div>
-
-                <LoginButton />
+                <SignedOut>
+                    <LoginButton />
+                </SignedOut>
+                <SignedIn>
+                    <UserButton />
+                </SignedIn>
             </div>
 
             {/* Mobile Menu Button */}

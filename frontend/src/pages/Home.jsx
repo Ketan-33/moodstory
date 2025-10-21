@@ -1,8 +1,9 @@
+import { SignInButton, useUser } from "@clerk/clerk-react";
 import video from "../assets/video.mp4";
 import { Smile, Brain, Film, Music, ArrowLeft, ArrowRight } from "lucide-react";
-import {Link} from "react-router-dom"
+import { Link } from "react-router-dom"
 const Home = () => {
-
+  const { isSignedIn, user } = useUser();
   return (
     <div>
       <section className="relative pt-20 h-screen  text-white min-h-screen flex flex-col justify-center items-center px-4 sm:px-6 md:px-20 overflow-hidden w-full">
@@ -33,14 +34,30 @@ const Home = () => {
 
           {/* Buttons */}
           <div className="flex flex-wrap gap-4 justify-center md:justify-start">
-            <Link to={"/generate-story"}>
-              <button className="px-6 py-3 rounded-full text-white font-medium
+            {
+              (isSignedIn) ?
+                <>
+                  <Link to={"/generate-story"}>
+                    <button className="px-6 py-3 rounded-full text-white font-medium
                    bg-gradient-to-r from-purple-500 via-pink-500 to-blue-500
                    bg-[length:200%_200%] animate-gradient-slow
                    hover:scale-101 transition-transform duration-300 shadow-lg shadow-purple-500/30 cursor-pointer">
-                Generate Story
-              </button>
-            </Link>
+                      Generate Story
+                    </button>
+                  </Link>
+                </> :
+                <>
+                  <SignInButton>
+                    <button className="px-6 py-3 rounded-full text-white font-medium
+                   bg-gradient-to-r from-purple-500 via-pink-500 to-blue-500
+                   bg-[length:200%_200%] animate-gradient-slow
+                   hover:scale-101 transition-transform duration-300 shadow-lg shadow-purple-500/30 cursor-pointer">
+                      Generate Story
+                    </button>
+                  </SignInButton>
+                </>
+            }
+
             <button
 
               className="px-6 py-3 border border-gray-700 rounded-full hover:border-white transition"
