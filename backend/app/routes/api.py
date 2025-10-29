@@ -24,7 +24,7 @@ async def generate_story_endpoint(
     # Dummy steps
     mood = detect_mood(img_path, audio_path)
     words = generate_words(mood)
-    story = generate_story(mood, words, genre)
+    story = generate_story(mood, words)
 
     story_lines = story.split("\n", 1)  # split at the first newline
     title = story_lines[0].strip() if len(story_lines) > 0 else ""
