@@ -23,7 +23,7 @@ const Navbar = () => {
             };
             setUserId(user.id);
             setUserData(userData)
-            console.log(userData);
+            // console.log(userData);
 
             syncUser(userData);
         }
