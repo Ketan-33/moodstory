@@ -27,6 +27,7 @@ pymongo
 # File handling & utilities
 python-multipart  # for file uploads in FastAPI
 python-dotenv     # for .env config file
+edge_tts
 
 # Optional (for async MongoDB access, use instead of pymongo)
 # motor

@@ -1,4 +1,4 @@
-import { Mic, MicOff, Video } from "lucide-react";
+import { Mic, MicOff, Pause, Play, Video } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { ScanningAnimation } from "../components/ui/ScanningAnimation";
 import "./css/Story.css";
@@ -21,11 +21,31 @@ const Story = () => {
   const [audioBlob, setAudioBlob] = useState(null);
   const [isListening, setIsListening] = useState(false);
 
-  const [question, setQuestion] = useState("How are you feeling today?");
+  const [question, setQuestion] = useState("How was your day today?");
   const audioChunks = useRef([]);
+  const [isPlaying, setIsPlaying] = useState(false);
+  const audioRef = useRef(null);
 
+  // Path to the file saved in frontend/public/
+  const audioSrc = "/audio_0.mp3";
 
-  const {userId} =useUserContext();
+  const toggleAudio = async () => {
+    const audio = audioRef.current;
+    if (!audio) return;
+
+    try {
+      if (isPlaying) {
+        await audio.pause();
+      } else {
+        await audio.play();
+      }
+      setIsPlaying(!isPlaying);
+    } catch (err) {
+      console.error("Audio play/pause error:", err);
+    }
+  };
+
+  const { userId } = useUserContext();
 
   useEffect(() => {
     navigator.mediaDevices
@@ -84,7 +104,7 @@ const Story = () => {
   }
 
   async function captureFrames(stream) {
-    const delay = 1000;
+    const delay = 3000;
     const video = videoRef.current;
     const canvas = canvasRef.current;
 
@@ -121,7 +141,42 @@ const Story = () => {
       const generateStory = async () => {
         try {
           const result = await handleSubmit();
-          if (result && (result.title || result.body)) {
+          console.log("result", result)
+          // ✅ Only proceed if backend returned success and story data
+          if (result && result.status === "true") {
+            // Prepare story data for saving
+            const storyData = {
+              userId: result.userId,
+              mood: result.mood,
+              audioMood: result.audioMood,
+              imageMood: result.imageMood,
+              words: result.words,
+              title: result.title,
+              body: result.body,
+              genre: result.genre || "any",
+            };
+
+            try {
+              const saveResponse = await fetch("http://localhost:8000/save-story", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(storyData),
+              });
+
+              if (!saveResponse.ok) {
+                console.error("Save story response not OK:", saveResponse.status);
+                const text = await saveResponse.text();
+                console.error("Save story raw response:", text);
+              }
+
+              const saveResult = await saveResponse.json();
+              console.log("Story saved:", saveResult);
+            } catch (error) {
+              console.error("❌ Network fetch error:", error);
+            }
+
+
+            // ✅ Show story on UI
             setStory({
               title: result.title || "Untitled Story",
               text: result.body || "",
@@ -130,7 +185,7 @@ const Story = () => {
             setTypewriterIndex(0);
             setPageState("STORY_DISPLAY");
           } else {
-            console.error("Invalid response format from /generate-story:", result);
+            console.error("Story generation failed:", result);
             setPageState("AUDIO_INPUT");
           }
         } catch (err) {
@@ -138,27 +193,66 @@ const Story = () => {
           setPageState("AUDIO_INPUT");
         }
       };
+
       generateStory();
     }
   }, [pageState]);
 
+
+
+
   useEffect(() => {
     if (pageState !== "STORY_DISPLAY" || !story.text) return;
 
-    const words = story.text.split(" ");
-    let index = 0;
-    setDisplayedText([]);
+    console.log("RAW STORY TEXT >>>", JSON.stringify(story.text.slice(0, 50)));
+
+    const cleanedText = story.text
+      .replace(/<UNK>/g, "")
+      .replace(/^[^A-Za-z0-9]+/, "")
+      .trim();
+
+    // Split into paragraphs (preserve double newlines)
+    const paragraphs = cleanedText.split(/\n\s*\n/).filter(Boolean);
+    console.log("PARAGRAPHS FOUND >>>", paragraphs.length);
+
+    let allWords = [];
+    let paragraphBreaks = [];
+
+    paragraphs.forEach((p, i) => {
+      const startIndex = allWords.length;
+      const words = p.split(/\s+/).filter(Boolean);
+      allWords = [...allWords, ...words];
+      if (i < paragraphs.length - 1) {
+        paragraphBreaks.push(startIndex + words.length - 1);
+      }
+    });
+
+    if (allWords.length === 0) return;
+
+    // show first word instantly
+    setDisplayedText([{ word: allWords[0], id: 0 }]);
+    let index = 1;
 
     const typeNext = () => {
-      if (index < words.length) {
-        setDisplayedText((prev) => [...prev, { word: words[index], id: index }]);
-        index++;
-        const delay = 180 + Math.random() * 60;
-        setTimeout(typeNext, delay);
+      setDisplayedText((prev) => {
+        const newText = [...prev, { word: allWords[index], id: index }];
+        // when reaching paragraph end, insert a special marker
+        if (paragraphBreaks.includes(index)) {
+          newText.push({ word: "\n\n", id: `break-${index}` });
+        }
+        return newText;
+      });
+      index++;
+      if (index < allWords.length) {
+        setTimeout(typeNext, 160 + Math.random() * 60);
       }
     };
-    typeNext();
-  }, [story.text, pageState]);
+
+    const timeout = setTimeout(() => typeNext(), 150);
+
+    return () => clearTimeout(timeout);
+  }, [pageState, story.text]);
+
 
   const handleSubmit = async () => {
     if (!imageBlob || !audioBlob) {
@@ -169,7 +263,8 @@ const Story = () => {
     const formData = new FormData();
     formData.append("image", imageBlob, "face1.jpg");
     formData.append("audio", audioBlob, "input.wav");
-    formData.append("userId",userId );
+    formData.append("userId", userId);
+    console.log(formData);
 
 
     try {
@@ -178,15 +273,19 @@ const Story = () => {
         body: formData,
       });
 
+      console.log("Response received:", response);
+
       if (response.ok) {
         const result = await response.json();
         setStory({
           title: result.title || "Untitled Story",
           text: result.body || "No story content available.",
         });
-        console.log(result)
+        // if (result.audio_path) setAudioPath(result.audio_path);
+        console.log(result);
         return result;
-      } else {
+      }
+      else {
         console.error("Upload failed:", response.status);
         return null;
       }
@@ -268,13 +367,35 @@ const Story = () => {
           <h1 className="text-4xl md:text-5xl font-bold text-center mb-8">
             {story.title}
           </h1>
-          <p className="max-w-4xl text-lg text-left text-justify leading-relaxed whitespace-pre-wrap">
+          <div style={{ textAlign: "center", marginTop: "40px" }}>
+            {/* hidden audio element */}
+            <audio ref={audioRef} src={audioSrc} preload="auto" />
+
+            <button
+              onClick={toggleAudio}
+              style={{
+                padding: "10px 20px",
+                fontSize: "18px",
+                cursor: "pointer",
+                borderRadius: "8px",
+                backgroundColor: "#007bff",
+                color: "white",
+                border: "none",
+              }}
+            >
+              {isPlaying ? <Pause size={20} /> : <Play size={20} />}{" "}
+              {isPlaying ? "Pause Audio" : "Play Audio"}
+            </button>
+          </div>
+
+          <p className="max-w-4xl text-lg text-justify leading-relaxed whitespace-pre-wrap">
             {displayedText.map(({ word, id }) => (
               <span key={id} className="ai-word">
-                {word}{" "}
+                {word === "\n\n" ? "\n\n" : `${word} `}
               </span>
             ))}
           </p>
+
 
           {previewVisible && stream && (
             <video
