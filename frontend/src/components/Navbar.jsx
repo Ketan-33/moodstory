@@ -43,7 +43,9 @@ const Navbar = () => {
             transition-all duration-300 shadow-xl">
 
             {/* Logo */}
-            <div className=" text-2xl w-1/4 font-bold">Moodstory.io</div>
+            <Link to="/">
+                <div className=" text-2xl w-1/4 font-bold">Moodstory.io</div>
+            </Link>
 
             {/* Desktop Menu */}
 
