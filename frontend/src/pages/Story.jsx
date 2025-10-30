@@ -21,7 +21,7 @@ const Story = () => {
   const [audioBlob, setAudioBlob] = useState(null);
   const [isListening, setIsListening] = useState(false);
 
-  const [question, setQuestion] = useState("How are you feeling today?");
+  const [question, setQuestion] = useState("How was your day today?");
   const audioChunks = useRef([]);
 
 

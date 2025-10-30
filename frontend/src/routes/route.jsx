@@ -4,6 +4,7 @@ import Home from "../pages/Home";
 import Story from "../pages/Story";
 import Test from "../pages/Test";
 import WebcamCapture from "../components/Demo";
+import Dashboard from "../pages/Dashboard";
 
 const router = createBrowserRouter([
     {
@@ -25,6 +26,10 @@ const router = createBrowserRouter([
             {
                 path:"demo",
                 element :<WebcamCapture/>
+            },
+            {
+                path:"dashboard",
+                element :<Dashboard/>
             },
             
         ]
