@@ -1,5 +1,5 @@
 from models.CNNMoodDetection.model import CNNMoodDetector
-
+from models.LibrosaMoodDetect.model import AudioMoodDetector
 
 def detect_mood(image_path, audio_path=None):
     # Mood from Image
@@ -7,9 +7,10 @@ def detect_mood(image_path, audio_path=None):
     imood, iconfidence = mood_detector.predict_emotion(image_path)
     
     # TODO: Mood from Audio
-    # amood = "happy"
-    
+    audio_mood_detector = AudioMoodDetector()
+    agender, amood, aconfidence, apreds = audio_mood_detector.predict_mood(audio_path)
+
     # TODO: Combine moods
-    mood = imood # change to iconfidence > aconfidence ? imood : amood after audio model is done
-    
-    return mood
+    mood = imood if iconfidence > aconfidence else amood
+
+    return mood, amood, imood

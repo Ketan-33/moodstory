@@ -22,7 +22,7 @@ async def generate_story_endpoint(
         f.write(await audio.read())
 
     # Dummy steps
-    mood = detect_mood(img_path, audio_path)
+    mood, amood, imood = detect_mood(img_path, audio_path)
     words = generate_words(mood)
     story = generate_story(mood, words)
 
@@ -32,6 +32,8 @@ async def generate_story_endpoint(
     
     return {
         "mood": mood,
+        "audioMood": amood,
+        "imageMood": imood,
         "words": words,
         "title": title,
         "body": body,
