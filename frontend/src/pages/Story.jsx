@@ -154,31 +154,48 @@ const Story = () => {
       .replace(/^[^A-Za-z0-9]+/, "")
       .trim();
 
-    console.log("CLEANED TEXT START >>>", JSON.stringify(cleanedText.slice(0, 50)));
+    // Split into paragraphs (preserve double newlines)
+    const paragraphs = cleanedText.split(/\n\s*\n/).filter(Boolean);
+    console.log("PARAGRAPHS FOUND >>>", paragraphs.length);
 
-    const words = cleanedText.split(/\s+/).filter(Boolean);
-    console.log("FIRST 5 WORDS >>>", words.slice(0, 5));
+    let allWords = [];
+    let paragraphBreaks = [];
 
-    if (words.length === 0) return;
+    paragraphs.forEach((p, i) => {
+      const startIndex = allWords.length;
+      const words = p.split(/\s+/).filter(Boolean);
+      allWords = [...allWords, ...words];
+      if (i < paragraphs.length - 1) {
+        paragraphBreaks.push(startIndex + words.length - 1);
+      }
+    });
 
-    // 🩵 Instantly show the first word
-    setDisplayedText([{ word: words[0], id: 0 }]);
+    if (allWords.length === 0) return;
 
-    let index = 1; // start from the second word now
+    // show first word instantly
+    setDisplayedText([{ word: allWords[0], id: 0 }]);
+    let index = 1;
 
     const typeNext = () => {
-      setDisplayedText((prev) => [...prev, { word: words[index], id: index }]);
+      setDisplayedText((prev) => {
+        const newText = [...prev, { word: allWords[index], id: index }];
+        // when reaching paragraph end, insert a special marker
+        if (paragraphBreaks.includes(index)) {
+          newText.push({ word: "\n\n", id: `break-${index}` });
+        }
+        return newText;
+      });
       index++;
-      if (index < words.length) {
-        setTimeout(typeNext, 180 + Math.random() * 60);
+      if (index < allWords.length) {
+        setTimeout(typeNext, 160 + Math.random() * 60);
       }
     };
 
-    // slight delay before continuing typing effect
-    const timeout = setTimeout(() => typeNext(), 200);
+    const timeout = setTimeout(() => typeNext(), 150);
 
     return () => clearTimeout(timeout);
   }, [pageState, story.text]);
+
 
 
 
@@ -295,10 +312,11 @@ const Story = () => {
           <p className="max-w-4xl text-lg text-left text-justify leading-relaxed whitespace-pre-wrap">
             {displayedText.map(({ word, id }) => (
               <span key={id} className="ai-word">
-                {word}{" "}
+                {word === "\n\n" ? "\n\n" : `${word} `}
               </span>
             ))}
           </p>
+
 
           {previewVisible && stream && (
             <video

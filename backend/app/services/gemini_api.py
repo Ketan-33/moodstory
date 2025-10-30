@@ -69,7 +69,7 @@ Try to use these words naturally (if they fit): {', '.join(cleaned)}
 
 Rules:
 - Begin with a creative standalone title (no quotes or labels).
-- 250–350 words, conversational and vivid.
+- 300–400 words, conversational and vivid.
 - No Markdown, emojis, symbols, or lists.
 - Avoid complex or poetic language.
 - End with a warm or hopeful message.
