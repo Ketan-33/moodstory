@@ -1,4 +1,4 @@
-import { Mic, MicOff, Video } from "lucide-react";
+import { Mic, MicOff, Pause, Play, Video } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { ScanningAnimation } from "../components/ui/ScanningAnimation";
 import "./css/Story.css";
@@ -23,7 +23,27 @@ const Story = () => {
 
   const [question, setQuestion] = useState("How was your day today?");
   const audioChunks = useRef([]);
+  const [isPlaying, setIsPlaying] = useState(false);
+  const audioRef = useRef(null);
 
+  // Path to the file saved in frontend/public/
+  const audioSrc = "/audio_0.mp3";
+
+  const toggleAudio = async () => {
+    const audio = audioRef.current;
+    if (!audio) return;
+
+    try {
+      if (isPlaying) {
+        await audio.pause();
+      } else {
+        await audio.play();
+      }
+      setIsPlaying(!isPlaying);
+    } catch (err) {
+      console.error("Audio play/pause error:", err);
+    }
+  };
 
   const { userId } = useUserContext();
 
@@ -261,9 +281,11 @@ const Story = () => {
           title: result.title || "Untitled Story",
           text: result.body || "No story content available.",
         });
-        console.log(result)
+        // if (result.audio_path) setAudioPath(result.audio_path);
+        console.log(result);
         return result;
-      } else {
+      }
+      else {
         console.error("Upload failed:", response.status);
         return null;
       }
@@ -345,6 +367,27 @@ const Story = () => {
           <h1 className="text-4xl md:text-5xl font-bold text-center mb-8">
             {story.title}
           </h1>
+          <div style={{ textAlign: "center", marginTop: "40px" }}>
+            {/* hidden audio element */}
+            <audio ref={audioRef} src={audioSrc} preload="auto" />
+
+            <button
+              onClick={toggleAudio}
+              style={{
+                padding: "10px 20px",
+                fontSize: "18px",
+                cursor: "pointer",
+                borderRadius: "8px",
+                backgroundColor: "#007bff",
+                color: "white",
+                border: "none",
+              }}
+            >
+              {isPlaying ? <Pause size={20} /> : <Play size={20} />}{" "}
+              {isPlaying ? "Pause Audio" : "Play Audio"}
+            </button>
+          </div>
+
           <p className="max-w-4xl text-lg text-justify leading-relaxed whitespace-pre-wrap">
             {displayedText.map(({ word, id }) => (
               <span key={id} className="ai-word">
