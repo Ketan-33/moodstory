@@ -24,10 +24,10 @@ async def generate_story_endpoint(
         with open(audio_path, "wb") as f:
             f.write(await audio.read())
 
-        # Process
-        mood, amood, imood = detect_mood(img_path, audio_path)
-        words = generate_words(mood)
-        story = generate_story(mood, words)
+    # Dummy steps
+    mood, amood, imood = fusion_mood_detect(img_path, audio_path)
+    words = generate_words(mood)
+    story = generate_story(mood, words)
 
         audio_path = await generate_voice(story)
         print(f"Generated audio at: {audio_path}")
