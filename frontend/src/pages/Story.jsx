@@ -142,23 +142,47 @@ const Story = () => {
     }
   }, [pageState]);
 
+
+
   useEffect(() => {
     if (pageState !== "STORY_DISPLAY" || !story.text) return;
 
-    const words = story.text.split(" ");
-    let index = 0;
-    setDisplayedText([]);
+    console.log("RAW STORY TEXT >>>", JSON.stringify(story.text.slice(0, 50)));
+
+    const cleanedText = story.text
+      .replace(/<UNK>/g, "")
+      .replace(/^[^A-Za-z0-9]+/, "")
+      .trim();
+
+    console.log("CLEANED TEXT START >>>", JSON.stringify(cleanedText.slice(0, 50)));
+
+    const words = cleanedText.split(/\s+/).filter(Boolean);
+    console.log("FIRST 5 WORDS >>>", words.slice(0, 5));
+
+    if (words.length === 0) return;
+
+    // 🩵 Instantly show the first word
+    setDisplayedText([{ word: words[0], id: 0 }]);
+
+    let index = 1; // start from the second word now
 
     const typeNext = () => {
+      setDisplayedText((prev) => [...prev, { word: words[index], id: index }]);
+      index++;
       if (index < words.length) {
-        setDisplayedText((prev) => [...prev, { word: words[index], id: index }]);
-        index++;
-        const delay = 180 + Math.random() * 60;
-        setTimeout(typeNext, delay);
+        setTimeout(typeNext, 180 + Math.random() * 60);
       }
     };
-    typeNext();
-  }, [story.text, pageState]);
+
+    // slight delay before continuing typing effect
+    const timeout = setTimeout(() => typeNext(), 200);
+
+    return () => clearTimeout(timeout);
+  }, [pageState, story.text]);
+
+
+
+
 
   const handleSubmit = async () => {
     if (!imageBlob || !audioBlob) {
