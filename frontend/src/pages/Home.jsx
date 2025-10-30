@@ -58,12 +58,13 @@ const Home = () => {
                 </>
             }
 
-            <button
-
-              className="px-6 py-3 border border-gray-700 rounded-full hover:border-white transition"
-            >
-              Explore Features
-            </button>
+            <Link to={"/dashboard"}> 
+              <button
+                className="px-6 py-3 border cursor-pointer border-gray-700 rounded-full hover:border-white transition"
+              >
+                Dashboard 
+              </button>
+            </Link>
           </div>
         </div>
 

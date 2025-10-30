@@ -1,5 +1,5 @@
 from app.routes.api import router
-from fastapi import FastAPI
+from fastapi import FastAPI,Query
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 from pymongo import MongoClient
@@ -104,3 +104,18 @@ def save_story(story: Story):
             },
             status_code=500
         )
+
+
+
+from fastapi.responses import JSONResponse
+from datetime import datetime, timedelta
+
+@app.get("/get-user-stats/{user_id}")
+def get_user_stats(user_id: str):
+    try:
+        stories = list(stories_collection.find({"userId": user_id}))
+        for story in stories:
+            story["_id"] = str(story["_id"])
+        return JSONResponse({"success": True, "data": stories})
+    except Exception as e:
+        return JSONResponse({"success": False, "message": str(e)}, status_code=500)
