@@ -25,7 +25,7 @@ const Story = () => {
   const audioChunks = useRef([]);
 
 
-  const {userId} =useUserContext();
+  const { userId } = useUserContext();
 
   useEffect(() => {
     navigator.mediaDevices
@@ -84,7 +84,7 @@ const Story = () => {
   }
 
   async function captureFrames(stream) {
-    const delay = 1000;
+    const delay = 3000;
     const video = videoRef.current;
     const canvas = canvasRef.current;
 
@@ -121,7 +121,42 @@ const Story = () => {
       const generateStory = async () => {
         try {
           const result = await handleSubmit();
-          if (result && (result.title || result.body)) {
+          console.log("result", result)
+          // ✅ Only proceed if backend returned success and story data
+          if (result && result.status === "true") {
+            // Prepare story data for saving
+            const storyData = {
+              userId: result.userId,
+              mood: result.mood,
+              audioMood: result.audioMood,
+              imageMood: result.imageMood,
+              words: result.words,
+              title: result.title,
+              body: result.body,
+              genre: result.genre || "any",
+            };
+
+            try {
+              const saveResponse = await fetch("http://localhost:8000/save-story", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(storyData),
+              });
+
+              if (!saveResponse.ok) {
+                console.error("Save story response not OK:", saveResponse.status);
+                const text = await saveResponse.text();
+                console.error("Save story raw response:", text);
+              }
+
+              const saveResult = await saveResponse.json();
+              console.log("Story saved:", saveResult);
+            } catch (error) {
+              console.error("❌ Network fetch error:", error);
+            }
+
+
+            // ✅ Show story on UI
             setStory({
               title: result.title || "Untitled Story",
               text: result.body || "",
@@ -130,7 +165,7 @@ const Story = () => {
             setTypewriterIndex(0);
             setPageState("STORY_DISPLAY");
           } else {
-            console.error("Invalid response format from /generate-story:", result);
+            console.error("Story generation failed:", result);
             setPageState("AUDIO_INPUT");
           }
         } catch (err) {
@@ -138,9 +173,11 @@ const Story = () => {
           setPageState("AUDIO_INPUT");
         }
       };
+
       generateStory();
     }
   }, [pageState]);
+
 
 
 
@@ -195,10 +232,6 @@ const Story = () => {
 
     return () => clearTimeout(timeout);
   }, [pageState, story.text]);
-
-
-
-
 
 
   const handleSubmit = async () => {
@@ -312,7 +345,7 @@ const Story = () => {
           <h1 className="text-4xl md:text-5xl font-bold text-center mb-8">
             {story.title}
           </h1>
-          <p className="max-w-4xl text-lg text-left text-justify leading-relaxed whitespace-pre-wrap">
+          <p className="max-w-4xl text-lg text-justify leading-relaxed whitespace-pre-wrap">
             {displayedText.map(({ word, id }) => (
               <span key={id} className="ai-word">
                 {word === "\n\n" ? "\n\n" : `${word} `}
