@@ -13,4 +13,4 @@ def detect_mood(image_path, audio_path=None):
     # TODO: Combine moods
     mood = imood if iconfidence > aconfidence else amood
 
-    return mood
+    return mood, amood, imood
