@@ -1,6 +1,6 @@
 from app.services.gemini_api import generate_story
 from app.services.lstm_model import generate_words
-from app.services.mood_detector import detect_mood
+from app.services.mood_detector import fusion_mood_detect
 from fastapi import APIRouter, File, UploadFile,Form
 
 router = APIRouter()
@@ -22,7 +22,7 @@ async def generate_story_endpoint(
         f.write(await audio.read())
 
     # Dummy steps
-    mood, amood, imood = detect_mood(img_path, audio_path)
+    mood, amood, imood = fusion_mood_detect(img_path, audio_path)
     words = generate_words(mood)
     story = generate_story(mood, words)
 
