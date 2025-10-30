@@ -1,5 +1,6 @@
 from app.services.gemini_api import generate_story
 from app.services.lstm_model import generate_words
+from app.services.edge_tts import generate_voice
 from app.services.mood_detector import detect_mood
 from fastapi import APIRouter, File, UploadFile,Form
 
@@ -25,7 +26,9 @@ async def generate_story_endpoint(
     mood, amood, imood = detect_mood(img_path, audio_path)
     words = generate_words(mood)
     story = generate_story(mood, words)
-
+    
+    audio_path = await generate_voice(story)
+    print(f"Generated audio at: {audio_path}")
     story_lines = story.split("\n", 1)  # split at the first newline
     title = story_lines[0].strip() if len(story_lines) > 0 else ""
     body = story_lines[1].strip() if len(story_lines) > 1 else ""

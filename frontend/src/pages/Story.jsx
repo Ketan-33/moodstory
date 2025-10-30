@@ -210,7 +210,8 @@ const Story = () => {
     const formData = new FormData();
     formData.append("image", imageBlob, "face1.jpg");
     formData.append("audio", audioBlob, "input.wav");
-    formData.append("userId",userId );
+    formData.append("userId", userId);
+    console.log(formData);
 
 
     try {
@@ -218,6 +219,8 @@ const Story = () => {
         method: "POST",
         body: formData,
       });
+
+      console.log("Response received:", response);
 
       if (response.ok) {
         const result = await response.json();
