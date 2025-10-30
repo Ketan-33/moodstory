@@ -367,7 +367,7 @@ const Story = () => {
           <h1 className="text-4xl md:text-5xl font-bold text-center mb-8">
             {story.title}
           </h1>
-          <div style={{ textAlign: "center", marginTop: "40px" }}>
+          <div style={{ textAlign: "center", marginTop: "10px", marginBottom: "20px" }}>
             {/* hidden audio element */}
             <audio ref={audioRef} src={audioSrc} preload="auto" />
 
@@ -378,13 +378,13 @@ const Story = () => {
                 fontSize: "18px",
                 cursor: "pointer",
                 borderRadius: "8px",
-                backgroundColor: "#007bff",
+                backgroundColor: "#4A148c",
                 color: "white",
                 border: "none",
               }}
             >
               {isPlaying ? <Pause size={20} /> : <Play size={20} />}{" "}
-              {isPlaying ? "Pause Audio" : "Play Audio"}
+              {/* {isPlaying ? "Pause Audio" : "Play Audio"} */}
             </button>
           </div>
 
